@@ -1,40 +1,45 @@
+/****  ****/
+
 #define MoterSpeedWaitMsec 2000
-
-
-
-/******** pin_assign ********/
 int x;
+/********* Pin_assign *********/
+/**** Using TMC2100 Module ****/
+//datasheet : https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2100_datasheet.pdf
+//Ena  : Enable
+//Dir  : Motor Direction
+//Step : Step Signal
+//VIO  : IO VCC
+//M1B  :
+//M1A  :
+//M2A  :
+//M2B  : 
+//VM   :
+//CFG1 : Config1
+//CFG2 : Config2
+//CFG3 : Config3
+const int enable_pin = 10;
+const int step_pin = 8;
+const int dir_pin = 9;
+const int cfg1_pin = 11;
+const int cfg2_pin = 6;
+const int cfg3_pin = 7;
 
-int enable_pin = 12;
-int step_pin = 11;
-int dir_pin = 10;
-int mode_pin = 8;
-int mode = 0; //0:ただ回転　１：1回転ずつ
+/**** Using Some Pins for Config ****/
+//const int mode_pin = 8;
+//const int mode = 0; //0:ただ回転　１：1回転ずつ
 
-int led_pin = 9;
-
-int interruptlock = 0;
-
-int led_reed_switch = 13;
-volatile int led_reed_switch_state = 0;
+/**** Power LEDs ****/
+int pwr_led_pin = 13;
+int zero_led_pin = 12;
 
 volatile int zeroflag = LOW;
 
+/**** Function Prototyoe ****/
+void IO_Initialize();
 void DriveXstep(int step_number,int dir);
 
-/*
-おおたfabの施策用に作ったプログラム
-とりあえず回る
-*/
-
 void setup() { 
-  pinMode(enable_pin,OUTPUT); // Enable　→　Arduinoのenable_pin番ピンへ
-  pinMode(step_pin,OUTPUT); // Step →　Arduinoのstep_pin番ピンへ
-  pinMode(dir_pin,OUTPUT); // Dir →　Arduinoのdir_pin番ピンへ
-  pinMode(led_reed_switch,OUTPUT); // Dir →　Arduinoのdir_pin番ピンへ
-  digitalWrite(enable_pin,LOW); // Set Enable low　→　Low状態でEnable
-  attachInterrupt(0, ZeroPoint, RISING);
-  
+  IO_Initialize();
 }
 
 void loop() {
@@ -54,13 +59,31 @@ void loop() {
      interrupts();
     }else{
       DriveXstep(2,HIGH);
-      digitalWrite(led_reed_switch,led_reed_switch_state);
+      //digitalWrite(led_reed_switch,led_reed_switch_state);
       //delay入れるとガタつく
       //delay(4);
     }
   //}
 }
+void IO_Initialize(){
+  pinMode(enable_pin,OUTPUT);  // Enable　→　Arduinoのenable_pin番ピンへ
+  pinMode(step_pin,OUTPUT);    // Step →　Arduinoのstep_pin番ピンへ
+  pinMode(dir_pin,OUTPUT);     // Dir →　Arduinoのdir_pin番ピンへ
+  pinMode(cfg1_pin,OUTPUT);    // CFG1 →　Arduinoのcfg1_pin番ピンへ
+  pinMode(cfg2_pin,OUTPUT);    // CFG2 →　Arduinoのcfg2_pin番ピンへ
+  pinMode(cfg3_pin,OUTPUT);    // CFG3 →　Arduinoのcfg3_pin番ピンへ
 
+  pinMode(pwr_led_pin,OUTPUT); // 
+  pinMode(zero_led_pin,OUTPUT);// 
+
+  digitalWrite(enable_pin,LOW); // Set Enable low　→　Low状態でEnable
+
+  digitalWrite(cfg1_pin,LOW); // Set Enable low　→　Low状態でEnable
+  digitalWrite(cfg2_pin,HIGH); // Set Enable low　→　Low状態でEnable
+  digitalWrite(cfg3_pin,LOW); // Set Enable low　→　Low状態でEnable
+
+  attachInterrupt(0, ZeroPoint, RISING);
+}
 
 void DriveXstep(int step_number,int dir){
    digitalWrite(dir_pin,HIGH); // Set Dir High　→　回転方向をセット
@@ -73,9 +96,5 @@ void DriveXstep(int step_number,int dir){
   }
 }
 void ZeroPoint(){
-  if(interruptlock == 0){
     zeroflag = !zeroflag;
-    led_reed_switch_state = !led_reed_switch_state;
-  }else{
-  }
 }
