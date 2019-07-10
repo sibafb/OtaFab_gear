@@ -32,7 +32,7 @@ const int cfg3_pin = 7;
 int pwr_led_pin = 13;
 int zero_led_pin = 12;
 
-volatile int zeroflag = LOW;
+bool zeroflag = false;
 
 /**** Function Prototyoe ****/
 void IO_Initialize();
@@ -48,14 +48,14 @@ void loop() {
   //  DriveXstep(400,HIGH);
  // }else{
     
-    if(zeroflag == HIGH){
-     
-     delay(2000);
+    if(zeroflag == true){
      
      noInterrupts();
      //一定時間割り込み空処理で回す ※リードスイッチの誤検知対策、半回転させてから通常動作に戻す
+     digitalWrite(zero_led_pin,HIGH); // 
      DriveXstep(350,HIGH);
      zeroflag = LOW;
+     digitalWrite(zero_led_pin,LOW); // 
      interrupts();
     }else{
       DriveXstep(2,HIGH);
@@ -82,6 +82,8 @@ void IO_Initialize(){
   digitalWrite(cfg2_pin,HIGH); // Set Enable low　→　Low状態でEnable
   digitalWrite(cfg3_pin,LOW); // Set Enable low　→　Low状態でEnable
 
+  digitalWrite(pwr_led_pin,HIGH); // Set Enable low　→　Low状態でEnable
+
   attachInterrupt(0, ZeroPoint, RISING);
 }
 
@@ -96,5 +98,6 @@ void DriveXstep(int step_number,int dir){
   }
 }
 void ZeroPoint(){
-    zeroflag = !zeroflag;
+    zeroflag = true;
+    delayMicroseconds(MoterSpeedWaitMsec); // 2ｍｓ待って 
 }

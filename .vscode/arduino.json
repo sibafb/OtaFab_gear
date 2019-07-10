@@ -1,0 +1,7 @@
+{
+    "board": "arduino:avr:pro",
+    "configuration": "cpu=16MHzatmega328",
+    "programmer": "AVRISP mkII",
+    "sketch": "Otafab_Gear_Move\\Otafab_Gear_Move.ino",
+    "port": "COM3"
+}
