@@ -9,11 +9,11 @@ int x;
 //Dir  : Motor Direction
 //Step : Step Signal
 //VIO  : IO VCC
-//M1B  :
-//M1A  :
-//M2A  :
-//M2B  : 
-//VM   :
+//M1B  :Black
+//M1A  :Green
+//M2A  :Red
+//M2B  : Blue
+//VM   :MotorPower
 //CFG1 : Config1
 //CFG2 : Config2
 //CFG3 : Config3
