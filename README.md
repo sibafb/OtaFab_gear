@@ -14,7 +14,9 @@
 
 図面で起こしたいところですが...一先ず写真
 
+![ue](https://raw.githubusercontent.com/wiki/sibafb/OtaFab_gear/images/ue.jpg)
 
+![ue](https://raw.githubusercontent.com/wiki/sibafb/OtaFab_gear/images/kiban.jpg)
 
 # ToImprove
 
