@@ -20,4 +20,6 @@
 
 # ToImprove
 
+結構音が出るので静音化はしたい
+下このように静音化できるみたい
 https://github.com/watterott/SilentStepStick
